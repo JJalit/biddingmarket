@@ -6,7 +6,7 @@ import InfoScreen from './app/screens/InfoScreen';
 import FindScreen from './app/screens/FindScreen';
 
 const App = () => {
-  return <FindScreen />;
+  return <WelcomeScreen />;
 };
 
 export default App;
