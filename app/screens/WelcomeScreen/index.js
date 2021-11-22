@@ -1,6 +1,7 @@
-import React from 'react';
-import {View, TextInput, Button, TouchableOpacity, Image, StyleSheet} from 'react-native';
+import React, {useState} from 'react';
+import {View, TextInput, Button, TouchableOpacity, Image, StyleSheet, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {getProfile as getKakaoProfile, login, logout, unlink} from '@react-native-seoul/kakao-login';
 
 import Screen from '../../components/Screen';
 import Sentence from '../../components/Sentence';
@@ -10,6 +11,34 @@ function Dummy() {
 }
 
 const WelcomeScreen = () => {
+  const [result, setResult] = useState('');
+
+  const signInWithKakao = async () => {
+    const token = await login();
+
+    setResult(JSON.stringify(token));
+    console.log(JSON.stringify(token));
+  };
+
+  const signOutWithKakao = async () => {
+    const message = await logout();
+
+    setResult(message);
+  };
+
+  const getProfile = async () => {
+    const profile = await getKakaoProfile();
+
+    console.log(JSON.stringify(profile));
+    setResult(JSON.stringify(profile));
+  };
+
+  const unlinkKakao = async () => {
+    const message = await unlink();
+
+    setResult(message);
+  };
+
   return (
     <Screen>
       <View style={styles.wholePadding}>
@@ -19,7 +48,7 @@ const WelcomeScreen = () => {
           <Sentence text="네이버로 로그인" bold color="white" />
           <Dummy />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.kakao}>
+        <TouchableOpacity onPress={getProfile} style={styles.kakao}>
           <Image source={require('../../assets/kakao_icon.png')} style={styles.kakaoImage} />
           <Sentence text="카카오로 로그인" bold />
           <Dummy />
@@ -29,6 +58,7 @@ const WelcomeScreen = () => {
           <Sentence text="Apple ID로 로그인" bold color="white" />
           <Dummy />
         </TouchableOpacity>
+        <Text>{result}</Text>
         <Sentence text="E-mail 아이디로 로그인" size={25} bold style={styles.emailLogin} />
         <View style={styles.row}>
           <Sentence text="이메일" size={18} bold style={styles.typeWidth} />
