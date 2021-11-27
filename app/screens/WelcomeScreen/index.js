@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {View, TextInput, Button, TouchableOpacity, Image, StyleSheet, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {getProfile as getKakaoProfile, login, logout, unlink} from '@react-native-seoul/kakao-login';
+import {NaverLogin, getProfile} from '@react-native-seoul/naver-login';
 
 import Screen from '../../components/Screen';
 import Sentence from '../../components/Sentence';
@@ -12,6 +13,9 @@ function Dummy() {
 
 const WelcomeScreen = () => {
   const [result, setResult] = useState('');
+  const [naverToken, setNaverToken] = useState(null);
+
+  // Kakao Login
 
   const signInWithKakao = async () => {
     const token = await login();
@@ -39,11 +43,34 @@ const WelcomeScreen = () => {
     setResult(message);
   };
 
+  // Naver Login
+
+  const iosKeys = {
+    kConsumerKey: 'AuAyQilbCqs03G9bkbiP',
+    kConsumerSecret: 'RpM8DOz6SX',
+    kServiceAppName: '비딩마켓',
+    kServiceAppUrlScheme: 'https://www.snspumasi.com', // only for iOS
+  };
+
+  const naverLogin = props => {
+    return new Promise((resolve, reject) => {
+      NaverLogin.login(props, (err, token) => {
+        console.log(`\n\n  Token is fetched  :: ${token} \n\n`);
+        setNaverToken(token);
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve(token);
+      });
+    });
+  };
+
   return (
     <Screen>
       <View style={styles.wholePadding}>
         <Sentence text="SNS 간편 로그인" size={25} bold style={styles.socialLogin} />
-        <TouchableOpacity style={styles.naver}>
+        <TouchableOpacity onPress={() => naverLogin(iosKeys)} style={styles.naver}>
           <Image source={require('../../assets/naver_icon.png')} width={1} height={1} style={styles.naverImage} />
           <Sentence text="네이버로 로그인" bold color="white" />
           <Dummy />
