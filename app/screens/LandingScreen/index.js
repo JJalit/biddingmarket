@@ -7,7 +7,7 @@ import Screen from '../../components/Screen';
 const LandingScreen = () => {
   return (
     <Screen>
-      <WebView source={{uri: 'https://m.bidingmarket.com/'}} />
+      <WebView source={{uri: 'https://www.bidingmarket.com/'}} />
     </Screen>
   );
 };
