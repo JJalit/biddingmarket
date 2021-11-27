@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, TextInput, Button, TouchableOpacity, Image, StyleSheet, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {getProfile as getKakaoProfile, login, logout, unlink} from '@react-native-seoul/kakao-login';
 import {NaverLogin, getProfile} from '@react-native-seoul/naver-login';
+import {appleAuth} from '@invertase/react-native-apple-authentication';
 
 import Screen from '../../components/Screen';
 import Sentence from '../../components/Sentence';
@@ -14,6 +15,13 @@ function Dummy() {
 const WelcomeScreen = () => {
   const [result, setResult] = useState('');
   const [naverToken, setNaverToken] = useState(null);
+
+  useEffect(() => {
+    // onCredentialRevoked returns a function that will remove the event listener. useEffect will call this function when the component unmounts
+    return appleAuth.onCredentialRevoked(async () => {
+      console.warn('If this function executes, User Credentials have been Revoked');
+    });
+  }, []);
 
   // Kakao Login
 
@@ -66,6 +74,25 @@ const WelcomeScreen = () => {
     });
   };
 
+  // 애플 로그인
+
+  async function onAppleButtonPress() {
+    // performs login request
+    const appleAuthRequestResponse = await appleAuth.performRequest({
+      requestedOperation: appleAuth.Operation.LOGIN,
+      requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+    });
+
+    // get current authentication state for user
+    // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
+    const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
+
+    // use credentialState response to ensure the user is authenticated
+    if (credentialState === appleAuth.State.AUTHORIZED) {
+      // user is authenticated
+    }
+  }
+
   return (
     <Screen>
       <View style={styles.wholePadding}>
@@ -80,7 +107,7 @@ const WelcomeScreen = () => {
           <Sentence text="카카오로 로그인" bold />
           <Dummy />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.apple}>
+        <TouchableOpacity onPress={onAppleButtonPress} style={styles.apple}>
           <Icon name="logo-apple" size={20} color="white" />
           <Sentence text="Apple ID로 로그인" bold color="white" />
           <Dummy />
