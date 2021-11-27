@@ -45,10 +45,10 @@ function Chip(props) {
 function CustomCheckBox(props) {
   const {value, onValueChange} = props;
   return (
-    <View style={{borderWidth: 1, borderColor: value ? '#ae3ec9' : '#ced4da', height: 17, width: 17, borderRadius: 5}}>
+    <View style={{borderWidth: 1, borderColor: value ? '#6324cc' : '#ced4da', height: 17, width: 17, borderRadius: 5}}>
       <CheckBox
         hideBox
-        onCheckColor="#ae3ec9"
+        onCheckColor="#6324cc"
         animationDuration={0}
         style={{height: 15, width: 15}}
         value={value}
@@ -138,7 +138,7 @@ const RegisterScreen = () => {
           <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10, marginBottom: 20}}>
             <Input width={200} />
             <TouchableOpacity
-              style={{backgroundColor: '#ae3ec9', padding: 20, alignSelf: 'center', paddingVertical: 10, borderRadius: 5, marginLeft: 20}}>
+              style={{backgroundColor: '#6324cc', padding: 20, alignSelf: 'center', paddingVertical: 10, borderRadius: 5, marginLeft: 20}}>
               <Sentence text="검색" size={20} bold color="white" style={{textAlign: 'center'}} />
             </TouchableOpacity>
           </View>
@@ -205,7 +205,7 @@ const RegisterScreen = () => {
             </View>
           </View>
         </View>
-        <TouchableOpacity style={{backgroundColor: '#ae3ec9', width: 130, alignSelf: 'center', paddingVertical: 10, marginVertical: 70}}>
+        <TouchableOpacity style={{backgroundColor: '#6324cc', width: 130, alignSelf: 'center', paddingVertical: 10, marginVertical: 70}}>
           <Sentence text="회원가입" size={20} bold color="white" style={{textAlign: 'center'}} />
         </TouchableOpacity>
       </ScrollView>

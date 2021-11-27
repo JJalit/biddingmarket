@@ -29,7 +29,7 @@ const FindScreen = () => {
             <Sentence text="가입시 사용한 아이디는" bold size={18} style={{textAlign: 'center'}} />
             <Sentence
               text={findId ? 'testId' : '일치하는 ID없음'}
-              color="#ae3ec9"
+              color="#6324cc"
               bold
               size={18}
               style={{textAlign: 'center', marginVertical: 20}}
@@ -39,7 +39,7 @@ const FindScreen = () => {
         ) : findPw ? (
           <View style={{alignSelf: 'center', marginTop: 200}}>
             <Sentence text="가입시 사용한 이메일" bold size={18} style={{textAlign: 'center'}} />
-            <Sentence text="testId@test.com" color="#ae3ec9" bold size={18} style={{textAlign: 'center', marginVertical: 20}} />
+            <Sentence text="testId@test.com" color="#6324cc" bold size={18} style={{textAlign: 'center', marginVertical: 20}} />
             <Sentence text="로 비밀번호를 전송하였습니다." bold size={18} style={{textAlign: 'center'}} />
           </View>
         ) : (
@@ -57,7 +57,7 @@ const FindScreen = () => {
               <Input placeholder="닉네임 입력해주세요" style={{marginLeft: 20, flex: 0.8}} />
             </View>
             <TouchableOpacity
-              style={{backgroundColor: '#ae3ec9', width: 250, alignSelf: 'center', paddingVertical: 10, marginTop: 30, borderRadius: 20}}>
+              style={{backgroundColor: '#6324cc', width: 250, alignSelf: 'center', paddingVertical: 10, marginTop: 30, borderRadius: 20}}>
               <Sentence text="ID 찾기" size={20} bold color="white" style={{textAlign: 'center'}} />
             </TouchableOpacity>
             {/* Password Section */}
@@ -68,7 +68,7 @@ const FindScreen = () => {
               <Input placeholder="아이디를 입력해주세요" style={{marginLeft: 20, flex: 0.8}} />
             </View>
             <TouchableOpacity
-              style={{backgroundColor: '#ae3ec9', width: 250, alignSelf: 'center', paddingVertical: 10, marginTop: 30, borderRadius: 20}}>
+              style={{backgroundColor: '#6324cc', width: 250, alignSelf: 'center', paddingVertical: 10, marginTop: 30, borderRadius: 20}}>
               <Sentence text="비밀번호 찾기" size={20} bold color="white" style={{textAlign: 'center'}} />
             </TouchableOpacity>
           </>
