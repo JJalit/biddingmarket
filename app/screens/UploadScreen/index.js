@@ -1,11 +1,13 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {WebView} from 'react-native-webview';
+
+import Screen from '../../components/Screen';
 
 const UploadScreen = () => {
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>UploadScreen</Text>
-    </View>
+    <Screen>
+      <WebView source={{uri: 'https://m.bidingmarket.com/board/list.php?&bdId=estimate'}} />
+    </Screen>
   );
 };
 

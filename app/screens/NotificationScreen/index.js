@@ -1,11 +1,13 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {WebView} from 'react-native-webview';
+
+import Screen from '../../components/Screen';
 
 const NotificationScreen = () => {
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>NotificationScreen</Text>
-    </View>
+    <Screen>
+      <WebView source={{uri: 'https://m.bidingmarket.com/mypage/my_notice.php'}} />
+    </Screen>
   );
 };
 
