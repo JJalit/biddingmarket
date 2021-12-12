@@ -19,7 +19,7 @@ function Input(props) {
 
 const FindScreen = () => {
   const [info, setInfo] = useState({name: '', nickname: '', id: ''});
-  let findId = true;
+  let findId = false;
   let findPw = false;
   return (
     <Screen>

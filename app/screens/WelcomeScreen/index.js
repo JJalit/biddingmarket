@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, TextInput, Button, TouchableOpacity, Image, StyleSheet, Text} from 'react-native';
+import {View, TextInput, Button, TouchableOpacity, Image, StyleSheet, Text, ScrollView} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {getProfile as getKakaoProfile, login, logout, unlink} from '@react-native-seoul/kakao-login';
 import {NaverLogin, getProfile} from '@react-native-seoul/naver-login';
@@ -7,12 +7,13 @@ import {appleAuth} from '@invertase/react-native-apple-authentication';
 
 import Screen from '../../components/Screen';
 import Sentence from '../../components/Sentence';
+import routes from '../../navigation/routes';
 
 function Dummy() {
   return <View style={styles.dummy} />;
 }
 
-const WelcomeScreen = () => {
+const WelcomeScreen = ({navigation}) => {
   const [result, setResult] = useState('');
   const [naverToken, setNaverToken] = useState(null);
 
@@ -54,10 +55,10 @@ const WelcomeScreen = () => {
   // Naver Login
 
   const iosKeys = {
-    kConsumerKey: 'AuAyQilbCqs03G9bkbiP',
-    kConsumerSecret: 'RpM8DOz6SX',
+    kConsumerKey: 'OPdIeEa4pHpxpyQ2PK5g',
+    kConsumerSecret: 'V2qXMyZXgn',
     kServiceAppName: '비딩마켓',
-    kServiceAppUrlScheme: 'https://www.snspumasi.com', // only for iOS
+    kServiceAppUrlScheme: 'http://www.bidingmarket.com', // only for iOS
   };
 
   const naverLogin = props => {
@@ -95,7 +96,7 @@ const WelcomeScreen = () => {
 
   return (
     <Screen>
-      <View style={styles.wholePadding}>
+      <ScrollView style={styles.wholePadding}>
         <Sentence text="SNS 간편 로그인" size={25} bold style={styles.socialLogin} />
         <TouchableOpacity onPress={() => naverLogin(iosKeys)} style={styles.naver}>
           <Image source={require('../../assets/naver_icon.png')} width={1} height={1} style={styles.naverImage} />
@@ -123,14 +124,14 @@ const WelcomeScreen = () => {
           <TextInput style={styles.textInput} />
         </View>
         <View style={{...styles.row, ...styles.addionalFunction}}>
-          <Button title="아이디찾기" color="grey" />
-          <Button title="비밀번호찾기" color="grey" />
-          <Button title="회원가입" color="grey" />
+          <Button title="아이디찾기" color="grey" onPress={() => navigation.navigate(routes.FIND)} />
+          <Button title="비밀번호찾기" color="grey" onPress={() => navigation.navigate(routes.FIND)} />
+          <Button title="회원가입" color="grey" onPress={() => navigation.navigate(routes.REGISTER)} />
         </View>
         <TouchableOpacity style={styles.loginButton}>
           <Sentence text="로그인" size={20} bold color="white" style={styles.center} />
         </TouchableOpacity>
-      </View>
+      </ScrollView>
     </Screen>
   );
 };
