@@ -51,17 +51,17 @@ const RegisterScreen = () => {
         <Sentence text="SNS 간편 회원가입" size={20} bold style={styles.margin0} />
 
         {/* Social Register Section */}
-        <TouchableOpacity style={styles.naverButton}>
+        <TouchableOpacity activeOpacity={0.5} style={styles.naverButton}>
           <Image source={require('../../assets/naver_icon.png')} width={1} height={1} style={styles.naverImage} />
           <Sentence text="네이버로 가입하기" bold color="white" />
           <Dummy />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.kakaoButton}>
+        <TouchableOpacity activeOpacity={0.5} style={styles.kakaoButton}>
           <Image source={require('../../assets/kakao_icon.png')} style={styles.kakaoImage} />
           <Sentence text="카카오로 가입하기" bold />
           <Dummy />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.appleButton}>
+        <TouchableOpacity activeOpacity={0.5} style={styles.appleButton}>
           <Icon name="logo-apple" size={20} color="white" />
           <Sentence text="애플로 가입하기" bold color="white" />
           <Dummy />

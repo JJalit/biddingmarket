@@ -12,7 +12,7 @@ const styles = {
 function SearchButton(props) {
   const {style, onPress} = props;
   return (
-    <StyledButton onPress={onPress} style={style}>
+    <StyledButton activeOpacity={0.5} onPress={onPress} style={style}>
       <Sentence text="검색" size={20} bold color="white" style={styles.text} />
     </StyledButton>
   );
