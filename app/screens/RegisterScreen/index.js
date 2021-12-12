@@ -33,7 +33,7 @@ const RegisterScreen = () => {
   };
 
   const onDeleteKeyword = v => {
-    setKeywordList(keywordList => keywordList.filter(keyword => keyword.itemNm !== v));
+    setKeywordSelected(keywordSelected => keywordSelected.filter(keyword => keyword !== v));
   };
 
   const onAddKeyword = v => {
@@ -108,16 +108,16 @@ const RegisterScreen = () => {
           <SearchButton onPress={onSearchKeyword} />
         </Row>
         {/* Keyword List */}
-        <Sentence text="선택 키워드" />
+        <Sentence text="선택된 키워드" />
         <BorderBox>
           {keywordSelected.map((keyword, i) => (
-            <Chip key={i} text={keyword} onAdd={onAddKeyword} onDelete={onDeleteKeyword} />
+            <Chip selected key={i} data={keyword} onDelete={onDeleteKeyword} />
           ))}
         </BorderBox>
         {/* Keyword Selector */}
         <BorderBox>
           {keywordList.map((keyword, i) => (
-            <Chip key={i} text={keyword.itemNm} onAdd={onAddKeyword} onDelete={onDeleteKeyword} />
+            <Chip key={i} data={keyword} onAdd={onAddKeyword} />
           ))}
         </BorderBox>
 
