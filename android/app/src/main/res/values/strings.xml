@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">비딩마켓</string>
+    <string name="kakao_app_key">f6ea081ff1e0ff1b854927f67f7445b5</string>
 </resources>
