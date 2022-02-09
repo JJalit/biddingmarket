@@ -2,7 +2,7 @@ import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import StyledButton from './StyledButton';
-import Sentence from '../../../components/Sentence';
+import Sentence from '../../../../components/Sentence';
 import IconButton from './IconButton';
 
 function Chip(props) {

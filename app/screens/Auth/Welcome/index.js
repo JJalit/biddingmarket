@@ -9,10 +9,10 @@ import qs from 'qs';
 import DOMParser from 'react-native-html-parser';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import Screen from '../../components/Screen';
-import Sentence from '../../components/Sentence';
-import routes from '../../navigation/routes';
-import {context as AuthContext} from '../../auth';
+import Screen from '../../../components/Screen';
+import Sentence from '../../../components/Sentence';
+import routes from '../../../navigation/routes';
+import {context as AuthContext} from '../../../auth';
 
 function Dummy() {
   return <View style={styles.dummy} />;
@@ -127,7 +127,7 @@ const WelcomeScreen = ({navigation}) => {
           <Dummy />
         </TouchableOpacity> */}
         <TouchableOpacity onPress={signInWithKakao} style={styles.kakao}>
-          <Image source={require('../../assets/kakao_icon.png')} style={styles.kakaoImage} />
+          <Image source={require('../../../assets/kakao_icon.png')} style={styles.kakaoImage} />
           <Sentence text="카카오로 로그인" bold />
           <Dummy />
         </TouchableOpacity>

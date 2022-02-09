@@ -1,7 +1,7 @@
 import React from 'react';
 
 import CustomCheckBox from '../../CustomCheckBox';
-import Sentence from '../../../../components/Sentence';
+import Sentence from '../../../../../components/Sentence';
 import Wrapper from './Wrapper';
 
 const styles = {

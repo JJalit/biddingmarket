@@ -4,9 +4,9 @@ import {TouchableOpacity, ScrollView, Image, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {login} from '@react-native-seoul/kakao-login';
 
-import {context as AuthContext} from '../../auth';
-import Screen from '../../components/Screen';
-import Sentence from '../../components/Sentence';
+import {context as AuthContext} from '../../../auth';
+import Screen from '../../../components/Screen';
+import Sentence from '../../../components/Sentence';
 import Input from './Input';
 import Chip from './Chip';
 import BorderBox from './BorderBox';
@@ -75,7 +75,7 @@ const RegisterScreen = () => {
           <Dummy />
         </TouchableOpacity> */}
         <TouchableOpacity activeOpacity={0.5} onPress={signInWithKakao} style={styles.kakaoButton}>
-          <Image source={require('../../assets/kakao_icon.png')} style={styles.kakaoImage} />
+          <Image source={require('../../../assets/kakao_icon.png')} style={styles.kakaoImage} />
           <Sentence text="카카오로 가입하기" bold />
           <Dummy />
         </TouchableOpacity>

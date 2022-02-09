@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Sentence from '../../../components/Sentence';
+import Sentence from '../../../../components/Sentence';
 import StyledButton from './StyledButton';
 
 const styles = {

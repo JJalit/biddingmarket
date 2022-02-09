@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {View, TextInput, TouchableOpacity, ScrollView} from 'react-native';
 
-import Screen from '../../components/Screen';
-import Sentence from '../../components/Sentence';
+import Screen from '../../../components/Screen';
+import Sentence from '../../../components/Sentence';
 
 function Input(props) {
   const {width, placeholder, style, value, onChangeText} = props;

@@ -1,16 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import SplashScreen from 'react-native-splash-screen';
 
-import {context as AuthContext} from './app/auth';
-import AppNavigator from './app/navigation/AppNavigator';
-import AuthNavigator from './app/navigation/AuthNavigator';
+import {context as AuthContext} from './auth';
+import {AppNavigator, AuthNavigator} from './navigation';
 
 const App = () => {
   const [user, setUser] = useState();
 
   useEffect(() => {
     loginCheck();
+    SplashScreen.hide();
   }, []);
 
   const loginCheck = async () => {

@@ -1,14 +1,41 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Account, Favorite, Landing, Notification, Upload} from '../screens/App';
 
-import LandingNavigator from './LandingNavigator';
-import NotificationNavigator from './NotificationNavigator';
-import UploadNavigator from './UploadNavigator';
-import FavoriteNavigator from './FavoriteNavigator';
-import AccountNavigator from './AccountNavigator';
-
+const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+
+const LandingNavigator = () => (
+  <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Screen name="Landing" component={Landing} />
+  </Stack.Navigator>
+);
+
+const NotificationNavigator = () => (
+  <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Screen name="Notification" component={Notification} />
+  </Stack.Navigator>
+);
+
+const UploadNavigator = () => (
+  <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Screen name="Upload" component={Upload} />
+  </Stack.Navigator>
+);
+
+const FavoriteNavigator = () => (
+  <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Screen name="Favorite" component={Favorite} />
+  </Stack.Navigator>
+);
+
+const AccountNavigator = () => (
+  <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Screen name="Account" component={Account} />
+  </Stack.Navigator>
+);
 
 const AppNavigator = () => {
   return (

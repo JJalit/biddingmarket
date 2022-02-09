@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Sentence from '../../../../components/Sentence';
+import Sentence from '../../../../../components/Sentence';
 import CustomCheckBox from '../../CustomCheckBox';
 import Wrapper from './Wrapper';
 

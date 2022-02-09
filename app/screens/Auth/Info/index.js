@@ -3,8 +3,8 @@ import {View, TextInput, TouchableOpacity, ScrollView, Image} from 'react-native
 import CheckBox from '@react-native-community/checkbox';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import Screen from '../../components/Screen';
-import Sentence from '../../components/Sentence';
+import Screen from '../../../components/Screen';
+import Sentence from '../../../components/Sentence';
 
 function Input(props) {
   const {width, placeholder, style} = props;
