@@ -1,20 +1,25 @@
-import React, {useEffect, useState} from 'react';
-import {View, TextInput, Button, TouchableOpacity, Image, StyleSheet, Text, ScrollView} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {View, TextInput, Button, TouchableOpacity, Image, StyleSheet, Text, ScrollView, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {getProfile as getKakaoProfile, login, logout, unlink} from '@react-native-seoul/kakao-login';
+import {getProfile as getKakaoProfile, login} from '@react-native-seoul/kakao-login';
 import {NaverLogin, getProfile} from '@react-native-seoul/naver-login';
 import {appleAuth} from '@invertase/react-native-apple-authentication';
+import axios from 'axios';
+import qs from 'qs';
+import DOMParser from 'react-native-html-parser';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Screen from '../../components/Screen';
 import Sentence from '../../components/Sentence';
 import routes from '../../navigation/routes';
+import {context as AuthContext} from '../../auth';
 
 function Dummy() {
   return <View style={styles.dummy} />;
 }
 
 const WelcomeScreen = ({navigation}) => {
-  const [result, setResult] = useState('');
+  const {setUser} = useContext(AuthContext);
   const [naverToken, setNaverToken] = useState(null);
 
   useEffect(() => {
@@ -29,27 +34,25 @@ const WelcomeScreen = ({navigation}) => {
   const signInWithKakao = async () => {
     const token = await login();
 
-    setResult(JSON.stringify(token));
-    console.log(JSON.stringify(token));
-  };
-
-  const signOutWithKakao = async () => {
-    const message = await logout();
-
-    setResult(message);
+    const accessToken = token.accessToken;
+    const refreshToken = token.refreshToken;
+    const url = `https://m.bidingmarket.com/member/kakao_app_native_login_ps.php?accessToken=${accessToken}&refreshToken=${refreshToken}`;
+    axios.get(url).then(response => {
+      if (response.data.result === 'success') {
+        setUser(true);
+        AsyncStorage.setItem('isLogin', 'true');
+      } else {
+        console.log(response.data.result);
+        navigation.navigate(routes.REGISTER);
+        setTimeout(() => {
+          Alert.alert('알림', `등록되지 않은 유저입니다.\n 회원가입을 진행해 주세요.`);
+        }, 1000);
+      }
+    });
   };
 
   const getProfile = async () => {
     const profile = await getKakaoProfile();
-
-    console.log(JSON.stringify(profile));
-    setResult(JSON.stringify(profile));
-  };
-
-  const unlinkKakao = async () => {
-    const message = await unlink();
-
-    setResult(message);
   };
 
   // Naver Login
@@ -94,26 +97,45 @@ const WelcomeScreen = ({navigation}) => {
     }
   }
 
+  // 일반 로그인
+  const generalLogin = () => {
+    let body = {
+      loginId: 'testuser',
+      loginPwd: 'bestice123!',
+    };
+
+    let config = {
+      method: 'post',
+      url: 'https://m.bidingmarket.com/Btcapi/login_api.php',
+      data: qs.stringify(body),
+    };
+    axios(config).then(response => {
+      const html = response.data;
+      const parser = new DOMParser.DOMParser();
+      const parsed = parser.parseFromString(html, 'text/html');
+      console.log(parsed.getElementsByTagName('script')[0].firstChild.data.indexOf('location'));
+    });
+  };
+
   return (
     <Screen>
       <ScrollView style={styles.wholePadding}>
         <Sentence text="SNS 간편 로그인" size={25} bold style={styles.socialLogin} />
-        <TouchableOpacity onPress={() => naverLogin(iosKeys)} style={styles.naver}>
+        {/* <TouchableOpacity onPress={() => naverLogin(iosKeys)} style={styles.naver}>
           <Image source={require('../../assets/naver_icon.png')} width={1} height={1} style={styles.naverImage} />
           <Sentence text="네이버로 로그인" bold color="white" />
           <Dummy />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={getProfile} style={styles.kakao}>
+        </TouchableOpacity> */}
+        <TouchableOpacity onPress={signInWithKakao} style={styles.kakao}>
           <Image source={require('../../assets/kakao_icon.png')} style={styles.kakaoImage} />
           <Sentence text="카카오로 로그인" bold />
           <Dummy />
         </TouchableOpacity>
-        <TouchableOpacity onPress={onAppleButtonPress} style={styles.apple}>
+        {/* <TouchableOpacity onPress={onAppleButtonPress} style={styles.apple}>
           <Icon name="logo-apple" size={20} color="white" />
           <Sentence text="Apple ID로 로그인" bold color="white" />
           <Dummy />
-        </TouchableOpacity>
-        <Text>{result}</Text>
+        </TouchableOpacity> */}
         <Sentence text="E-mail 아이디로 로그인" size={25} bold style={styles.emailLogin} />
         <View style={styles.row}>
           <Sentence text="이메일" size={18} bold style={styles.typeWidth} />
@@ -128,7 +150,7 @@ const WelcomeScreen = ({navigation}) => {
           <Button title="비밀번호찾기" color="grey" onPress={() => navigation.navigate(routes.FIND)} />
           <Button title="회원가입" color="grey" onPress={() => navigation.navigate(routes.REGISTER)} />
         </View>
-        <TouchableOpacity style={styles.loginButton}>
+        <TouchableOpacity style={styles.loginButton} onPress={generalLogin}>
           <Sentence text="로그인" size={20} bold color="white" style={styles.center} />
         </TouchableOpacity>
       </ScrollView>

@@ -1,8 +1,10 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import axios from 'axios';
 import {TouchableOpacity, ScrollView, Image, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {login} from '@react-native-seoul/kakao-login';
 
+import {context as AuthContext} from '../../auth';
 import Screen from '../../components/Screen';
 import Sentence from '../../components/Sentence';
 import Input from './Input';
@@ -15,6 +17,7 @@ import Row from './Row';
 import {TermItem, TermSection, TermItemHeader, TermItemsWrapper} from './Term';
 
 const RegisterScreen = () => {
+  const {setUser} = useContext(AuthContext);
   const [info, setInfo] = useState({email: {id: '', domain: ''}, pwd: '', nickname: '', keywords: [], policy: ''});
   const [toggleCheckBox, setToggleCheckBox] = useState({all: false, term0: false, term1: false, term2: false, term3: false, term4: false});
 
@@ -22,13 +25,28 @@ const RegisterScreen = () => {
   const [keywordList, setKeywordList] = useState([]);
   const [keywordSelected, setKeywordSelected] = useState([]);
 
+  const signInWithKakao = async () => {
+    const token = await login();
+
+    const accessToken = token.accessToken;
+    const refreshToken = token.refreshToken;
+    const url = `https://m.bidingmarket.com/member/kakao_app_native_login_ps.php?accessToken=${accessToken}&refreshToken=${refreshToken}&JoinBySnsType=kakao`;
+    axios.get(url).then(response => {
+      if (response.data.result === 'successSingup') {
+        console.log(response.data);
+        setUser(true);
+        AsyncStorage.setItem('isLogin', 'true');
+      } else {
+        console.log(response.data);
+        setUser(true);
+      }
+    });
+  };
+
   const onSearchKeyword = () => {
     axios
       .post('http://m.biddingmkt.godomall.com/Btcapi/keyword_list_api.php', {keyword: keywordText})
-      .then(response => {
-        setKeywordList(response.data.data);
-        console.log(typeof response.data.data);
-      })
+      .then(response => setKeywordList(response.data.data))
       .catch(err => console.log(err));
   };
 
@@ -41,7 +59,7 @@ const RegisterScreen = () => {
   };
 
   const onRegister = () => {
-    console.log('register');
+    console.log(info);
   };
 
   return (
@@ -51,21 +69,21 @@ const RegisterScreen = () => {
         <Sentence text="SNS 간편 회원가입" size={20} bold style={styles.margin0} />
 
         {/* Social Register Section */}
-        <TouchableOpacity activeOpacity={0.5} style={styles.naverButton}>
+        {/* <TouchableOpacity activeOpacity={0.5} style={styles.naverButton}>
           <Image source={require('../../assets/naver_icon.png')} width={1} height={1} style={styles.naverImage} />
           <Sentence text="네이버로 가입하기" bold color="white" />
           <Dummy />
-        </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.5} style={styles.kakaoButton}>
+        </TouchableOpacity> */}
+        <TouchableOpacity activeOpacity={0.5} onPress={signInWithKakao} style={styles.kakaoButton}>
           <Image source={require('../../assets/kakao_icon.png')} style={styles.kakaoImage} />
           <Sentence text="카카오로 가입하기" bold />
           <Dummy />
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.5} style={styles.appleButton}>
+        {/* <TouchableOpacity activeOpacity={0.5} style={styles.appleButton}>
           <Icon name="logo-apple" size={20} color="white" />
           <Sentence text="애플로 가입하기" bold color="white" />
           <Dummy />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         {/* Email Register Section */}
         <Sentence text="E-mail로 회원가입" size={20} bold style={styles.emailText} />
@@ -87,10 +105,16 @@ const RegisterScreen = () => {
         {/* Password */}
         <Sentence text="비밀번호" bold />
         <Sentence text="영문, 숫자를 포함한 8자 이상의 비밀번호를 입력해주세요." size={14} color="grey" style={styles.margin2} />
-        <Input placeholder="비밀번호" style={styles.margin1} value={info.pwd} onChangeText={e => setInfo(info => ({...info, pwd: e}))} />
+        <Input
+          secureTextEntry
+          placeholder="비밀번호"
+          style={styles.margin1}
+          value={info.pwd}
+          onChangeText={e => setInfo(info => ({...info, pwd: e}))}
+        />
         {/* Check Password */}
         <Sentence text="비밀번호 확인" bold />
-        <Input placeholder="비밀번호 확인" style={styles.margin1} />
+        <Input secureTextEntry placeholder="비밀번호 확인" style={styles.margin1} />
         {/* Nickname */}
         <Sentence text="닉네임" bold />
         <Input
