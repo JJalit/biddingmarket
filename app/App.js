@@ -19,6 +19,7 @@ const App = () => {
     if (isLogin === 'true') {
       setUser(true);
     }
+    // await AsyncStorage.removeItem('isLogin');
   };
 
   return (

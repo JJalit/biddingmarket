@@ -3,7 +3,7 @@ import {View, TextInput, Button, TouchableOpacity, Image, StyleSheet, Text, Scro
 import Icon from 'react-native-vector-icons/Ionicons';
 import {getProfile as getKakaoProfile, login} from '@react-native-seoul/kakao-login';
 import {NaverLogin, getProfile} from '@react-native-seoul/naver-login';
-import {appleAuth} from '@invertase/react-native-apple-authentication';
+// import {appleAuth} from '@invertase/react-native-apple-authentication';
 import axios from 'axios';
 import qs from 'qs';
 import DOMParser from 'react-native-html-parser';
@@ -18,16 +18,24 @@ function Dummy() {
   return <View style={styles.dummy} />;
 }
 
+function NaviButton({onPress, style, fontStyle, text}) {
+  return (
+    <TouchableOpacity onPress={onPress} style={style}>
+      <Text style={fontStyle}>{text}</Text>
+    </TouchableOpacity>
+  );
+}
+
 const WelcomeScreen = ({navigation}) => {
   const {setUser} = useContext(AuthContext);
   const [naverToken, setNaverToken] = useState(null);
 
-  useEffect(() => {
-    // onCredentialRevoked returns a function that will remove the event listener. useEffect will call this function when the component unmounts
-    return appleAuth.onCredentialRevoked(async () => {
-      console.warn('If this function executes, User Credentials have been Revoked');
-    });
-  }, []);
+  // useEffect(() => {
+  //   // onCredentialRevoked returns a function that will remove the event listener. useEffect will call this function when the component unmounts
+  //   return appleAuth.onCredentialRevoked(async () => {
+  //     console.warn('If this function executes, User Credentials have been Revoked');
+  //   });
+  // }, []);
 
   // Kakao Login
 
@@ -80,22 +88,22 @@ const WelcomeScreen = ({navigation}) => {
 
   // 애플 로그인
 
-  async function onAppleButtonPress() {
-    // performs login request
-    const appleAuthRequestResponse = await appleAuth.performRequest({
-      requestedOperation: appleAuth.Operation.LOGIN,
-      requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
-    });
+  // async function onAppleButtonPress() {
+  //   // performs login request
+  //   const appleAuthRequestResponse = await appleAuth.performRequest({
+  //     requestedOperation: appleAuth.Operation.LOGIN,
+  //     requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+  //   });
 
-    // get current authentication state for user
-    // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
-    const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
+  //   // get current authentication state for user
+  //   // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
+  //   const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
 
-    // use credentialState response to ensure the user is authenticated
-    if (credentialState === appleAuth.State.AUTHORIZED) {
-      // user is authenticated
-    }
-  }
+  //   // use credentialState response to ensure the user is authenticated
+  //   if (credentialState === appleAuth.State.AUTHORIZED) {
+  //     // user is authenticated
+  //   }
+  // }
 
   // 일반 로그인
   const generalLogin = () => {
@@ -110,6 +118,7 @@ const WelcomeScreen = ({navigation}) => {
       data: qs.stringify(body),
     };
     axios(config).then(response => {
+      return console.log(response.data);
       const html = response.data;
       const parser = new DOMParser.DOMParser();
       const parsed = parser.parseFromString(html, 'text/html');
@@ -139,16 +148,16 @@ const WelcomeScreen = ({navigation}) => {
         <Sentence text="E-mail 아이디로 로그인" size={25} bold style={styles.emailLogin} />
         <View style={styles.row}>
           <Sentence text="이메일" size={18} bold style={styles.typeWidth} />
-          <TextInput style={styles.textInput} />
+          <TextInput style={styles.textInput} autoCapitalize="none" autoCorrect={false} allowFontScaling={false} />
         </View>
         <View style={{...styles.row, ...styles.pw}}>
           <Sentence text="비밀번호" size={18} bold style={styles.typeWidth} />
-          <TextInput style={styles.textInput} />
+          <TextInput style={styles.textInput} autoCapitalize="none" autoCorrect={false} allowFontScaling={false} secureTextEntry={true} />
         </View>
         <View style={{...styles.row, ...styles.addionalFunction}}>
-          <Button title="아이디찾기" color="grey" onPress={() => navigation.navigate(routes.FIND)} />
-          <Button title="비밀번호찾기" color="grey" onPress={() => navigation.navigate(routes.FIND)} />
-          <Button title="회원가입" color="grey" onPress={() => navigation.navigate(routes.REGISTER)} />
+          <NaviButton text="아이디찾기" fontStyle={{color: 'grey'}} onPress={() => navigation.navigate(routes.FIND)} />
+          <NaviButton text="비밀번호찾기" fontStyle={{color: 'grey'}} onPress={() => navigation.navigate(routes.FIND)} />
+          <NaviButton text="회원가입" fontStyle={{color: 'grey'}} onPress={() => navigation.navigate(routes.REGISTER)} />
         </View>
         <TouchableOpacity style={styles.loginButton} onPress={generalLogin}>
           <Sentence text="로그인" size={20} bold color="white" style={styles.center} />
@@ -223,15 +232,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ced4da',
     borderRadius: 3,
-    width: 200,
+    flex: 1,
     paddingVertical: 7,
+    paddingHorizontal: 10,
     marginLeft: 15,
   },
   pw: {
     marginTop: 25,
   },
   addionalFunction: {
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
     marginTop: 30,
     marginBottom: 20,
   },
