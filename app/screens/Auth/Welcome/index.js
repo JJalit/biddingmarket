@@ -13,6 +13,7 @@ import Screen from '../../../components/Screen';
 import Sentence from '../../../components/Sentence';
 import routes from '../../../navigation/routes';
 import {context as AuthContext} from '../../../auth';
+import Indicator from '../../../components/Indicator';
 
 function Dummy() {
   return <View style={styles.dummy} />;
@@ -28,6 +29,7 @@ function NaviButton({onPress, style, fontStyle, text}) {
 
 const WelcomeScreen = ({navigation}) => {
   const {setUser} = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
   const [naverToken, setNaverToken] = useState(null);
 
   // useEffect(() => {
@@ -41,6 +43,7 @@ const WelcomeScreen = ({navigation}) => {
 
   const signInWithKakao = async () => {
     const token = await login();
+    setLoading(true);
 
     const accessToken = token.accessToken;
     const refreshToken = token.refreshToken;
@@ -48,6 +51,7 @@ const WelcomeScreen = ({navigation}) => {
     axios.get(url).then(response => {
       if (response.data.result === 'success') {
         setUser(true);
+        setLoading(false);
         AsyncStorage.setItem('isLogin', 'true');
       } else {
         console.log(response.data.result);
@@ -127,43 +131,46 @@ const WelcomeScreen = ({navigation}) => {
   };
 
   return (
-    <Screen>
-      <ScrollView style={styles.wholePadding}>
-        <Sentence text="SNS 간편 로그인" size={25} bold style={styles.socialLogin} />
-        {/* <TouchableOpacity onPress={() => naverLogin(iosKeys)} style={styles.naver}>
+    <>
+      <Screen>
+        <ScrollView style={styles.wholePadding}>
+          <Sentence text="SNS 간편 로그인" size={25} bold style={styles.socialLogin} />
+          {/* <TouchableOpacity onPress={() => naverLogin(iosKeys)} style={styles.naver}>
           <Image source={require('../../assets/naver_icon.png')} width={1} height={1} style={styles.naverImage} />
           <Sentence text="네이버로 로그인" bold color="white" />
           <Dummy />
         </TouchableOpacity> */}
-        <TouchableOpacity onPress={signInWithKakao} style={styles.kakao}>
-          <Image source={require('../../../assets/kakao_icon.png')} style={styles.kakaoImage} />
-          <Sentence text="카카오로 로그인" bold />
-          <Dummy />
-        </TouchableOpacity>
-        {/* <TouchableOpacity onPress={onAppleButtonPress} style={styles.apple}>
+          <TouchableOpacity onPress={signInWithKakao} style={styles.kakao}>
+            <Image source={require('../../../assets/kakao_icon.png')} style={styles.kakaoImage} />
+            <Sentence text="카카오로 로그인" bold />
+            <Dummy />
+          </TouchableOpacity>
+          {/* <TouchableOpacity onPress={onAppleButtonPress} style={styles.apple}>
           <Icon name="logo-apple" size={20} color="white" />
           <Sentence text="Apple ID로 로그인" bold color="white" />
           <Dummy />
         </TouchableOpacity> */}
-        <Sentence text="E-mail 아이디로 로그인" size={25} bold style={styles.emailLogin} />
-        <View style={styles.row}>
-          <Sentence text="이메일" size={18} bold style={styles.typeWidth} />
-          <TextInput style={styles.textInput} autoCapitalize="none" autoCorrect={false} allowFontScaling={false} />
-        </View>
-        <View style={{...styles.row, ...styles.pw}}>
-          <Sentence text="비밀번호" size={18} bold style={styles.typeWidth} />
-          <TextInput style={styles.textInput} autoCapitalize="none" autoCorrect={false} allowFontScaling={false} secureTextEntry={true} />
-        </View>
-        <View style={{...styles.row, ...styles.addionalFunction}}>
-          <NaviButton text="아이디찾기" fontStyle={{color: 'grey'}} onPress={() => navigation.navigate(routes.FIND)} />
-          <NaviButton text="비밀번호찾기" fontStyle={{color: 'grey'}} onPress={() => navigation.navigate(routes.FIND)} />
-          <NaviButton text="회원가입" fontStyle={{color: 'grey'}} onPress={() => navigation.navigate(routes.REGISTER)} />
-        </View>
-        <TouchableOpacity style={styles.loginButton} onPress={generalLogin}>
-          <Sentence text="로그인" size={20} bold color="white" style={styles.center} />
-        </TouchableOpacity>
-      </ScrollView>
-    </Screen>
+          <Sentence text="E-mail 아이디로 로그인" size={25} bold style={styles.emailLogin} />
+          <View style={styles.row}>
+            <Sentence text="이메일" size={18} bold style={styles.typeWidth} />
+            <TextInput style={styles.textInput} autoCapitalize="none" autoCorrect={false} allowFontScaling={false} />
+          </View>
+          <View style={{...styles.row, ...styles.pw}}>
+            <Sentence text="비밀번호" size={18} bold style={styles.typeWidth} />
+            <TextInput style={styles.textInput} autoCapitalize="none" autoCorrect={false} allowFontScaling={false} secureTextEntry={true} />
+          </View>
+          <View style={{...styles.row, ...styles.addionalFunction}}>
+            <NaviButton text="아이디찾기" fontStyle={{color: 'grey'}} onPress={() => navigation.navigate(routes.FIND)} />
+            <NaviButton text="비밀번호찾기" fontStyle={{color: 'grey'}} onPress={() => navigation.navigate(routes.FIND)} />
+            <NaviButton text="회원가입" fontStyle={{color: 'grey'}} onPress={() => navigation.navigate(routes.REGISTER)} />
+          </View>
+          <TouchableOpacity style={styles.loginButton} onPress={generalLogin}>
+            <Sentence text="로그인" size={20} bold color="white" style={styles.center} />
+          </TouchableOpacity>
+        </ScrollView>
+      </Screen>
+      <Indicator visible={loading} />
+    </>
   );
 };
 
