@@ -30,6 +30,8 @@ function NaviButton({onPress, style, fontStyle, text}) {
 const WelcomeScreen = ({navigation}) => {
   const {setUser} = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [naverToken, setNaverToken] = useState(null);
 
   // useEffect(() => {
@@ -111,9 +113,11 @@ const WelcomeScreen = ({navigation}) => {
 
   // 일반 로그인
   const generalLogin = () => {
+    setLoading(true);
+
     let body = {
-      loginId: 'testuser',
-      loginPwd: 'bestice123!',
+      loginId: email,
+      loginPwd: password,
     };
 
     let config = {
@@ -122,11 +126,16 @@ const WelcomeScreen = ({navigation}) => {
       data: qs.stringify(body),
     };
     axios(config).then(response => {
-      return console.log(response.data);
-      const html = response.data;
-      const parser = new DOMParser.DOMParser();
-      const parsed = parser.parseFromString(html, 'text/html');
-      console.log(parsed.getElementsByTagName('script')[0].firstChild.data.indexOf('location'));
+      if (response.data.message === '로그인 성공') {
+        setUser(true);
+        setLoading(false);
+        AsyncStorage.setItem('isLogin', 'true');
+      } else {
+        navigation.navigate(routes.REGISTER);
+        setTimeout(() => {
+          Alert.alert('알림', `등록되지 않은 유저입니다.\n 회원가입을 진행해 주세요.`);
+        }, 1000);
+      }
     });
   };
 
@@ -153,11 +162,26 @@ const WelcomeScreen = ({navigation}) => {
           <Sentence text="E-mail 아이디로 로그인" size={25} bold style={styles.emailLogin} />
           <View style={styles.row}>
             <Sentence text="이메일" size={18} bold style={styles.typeWidth} />
-            <TextInput style={styles.textInput} autoCapitalize="none" autoCorrect={false} allowFontScaling={false} />
+            <TextInput
+              value={email}
+              onChangeText={e => setEmail(e)}
+              style={styles.textInput}
+              autoCapitalize="none"
+              autoCorrect={false}
+              allowFontScaling={false}
+            />
           </View>
           <View style={{...styles.row, ...styles.pw}}>
             <Sentence text="비밀번호" size={18} bold style={styles.typeWidth} />
-            <TextInput style={styles.textInput} autoCapitalize="none" autoCorrect={false} allowFontScaling={false} secureTextEntry={true} />
+            <TextInput
+              value={password}
+              onChangeText={e => setPassword(e)}
+              style={styles.textInput}
+              autoCapitalize="none"
+              autoCorrect={false}
+              allowFontScaling={false}
+              secureTextEntry={true}
+            />
           </View>
           <View style={{...styles.row, ...styles.addionalFunction}}>
             <NaviButton text="아이디찾기" fontStyle={{color: 'grey'}} onPress={() => navigation.navigate(routes.FIND)} />
