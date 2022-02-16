@@ -5,6 +5,7 @@ import SplashScreen from 'react-native-splash-screen';
 
 import {context as AuthContext} from './auth';
 import {AppNavigator, AuthNavigator} from './navigation';
+import Test from './screens/Test';
 
 const App = () => {
   const [user, setUser] = useState();
@@ -24,7 +25,7 @@ const App = () => {
 
   return (
     <AuthContext.Provider value={{user, setUser}}>
-      <NavigationContainer>{user ? <AppNavigator /> : <AuthNavigator />}</NavigationContainer>
+      <NavigationContainer>{user ? <Test /> : <AuthNavigator />}</NavigationContainer>
     </AuthContext.Provider>
   );
 };
